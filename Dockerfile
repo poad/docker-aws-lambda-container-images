@@ -22,6 +22,8 @@ RUN curl -fsSLo /tmp/setup "https://deb.nodesource.com/setup_${NODE_VERSION}.x" 
 
 FROM ${DEBIAN_DIST_NAME}:${DEBIAN_VERSION_NAME}${SLIM_IMAGE_SUFFIX} AS release
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 ARG DEPS="\
     autoconf \
     automake \
