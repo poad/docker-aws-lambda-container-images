@@ -1,0 +1,54 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main ]
+  schedule:
+    - cron: '26 17 * * 3'
+
+jobs:
+  build:
+    name: Build
+    runs-on: "ubuntu-18.04"
+    strategy:
+      matrix:
+        distributions: [
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 16 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 16 }
+        ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build an image from Dockerfile
+      env:
+        DOCKER_BUILDKIT: 1
+      run: |
+        docker build --rm \
+            -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
+            --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
+            --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
+            --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
+            --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+            .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}'
+          format: 'template'
+          template: '@/contrib/sarif.tpl'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
