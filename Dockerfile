@@ -62,6 +62,7 @@ RUN chmod +x /tmp/setup \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
+ && apt-get full-upgrade -qqy \
  && apt-get install -qqy --no-install-recommends nodejs python3.9-dev \
  && npm install -g yarn \
  && rm -rf /tmp/setup\
