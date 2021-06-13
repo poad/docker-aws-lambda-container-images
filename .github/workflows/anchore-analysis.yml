@@ -32,6 +32,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Build the Docker image
+        if: ${{ always() }}
         env:
           DOCKER_BUILDKIT: 1
         run: |
@@ -44,6 +45,7 @@ jobs:
               .
       - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
         uses: anchore/scan-action@main
+        if: ${{ always() }}
         with:
           image: "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}"
           acs-report-enable: true
