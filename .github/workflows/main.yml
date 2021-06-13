@@ -1,0 +1,78 @@
+name: Docker image build and push
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:    
+    - main 
+  schedule:
+    - cron:  '0 0 * * 4'
+
+jobs:
+  docker_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distributions: [
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 16 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 16 }
+        ]
+    steps:
+    - uses: actions/checkout@v2
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+    - name: Build ${{ matrix.distributions.dist }} ${{ matrix.distributions.code_name }} with Node.js ${{ matrix.distributions.node }}
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+      env:
+        DOCKER_BUILDKIT: 1
+      run: |
+        docker build --rm \
+            -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
+            --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
+            --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
+            --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
+            --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+            .
+    - name: Hadolint
+      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
+      uses: brpaz/hadolint-action@v1.5.0
+  
+  docker_push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distributions: [
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 16 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 16 }
+        ]
+    steps:
+    - uses: actions/checkout@v2
+      if: github.event_name != 'pull_request'
+    - name: Build
+      if: github.event_name != 'pull_request'
+      env:
+        DOCKER_BUILDKIT: 1
+      run: |
+        docker build --rm \
+            -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
+            --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
+            --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
+            --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
+            --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+            .
+    - name: push
+      if: github.event_name != 'pull_request'
+      env:
+        DOCKER_BUILDKIT: 1
+      run: |
+        echo "${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}" | docker login -u poad --password-stdin && \
+        docker push "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}"

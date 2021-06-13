@@ -1,1 +1,1 @@
-# docker-aws-lambda-container-ubuntu-image
+# docker-aws-lambda-container-images
