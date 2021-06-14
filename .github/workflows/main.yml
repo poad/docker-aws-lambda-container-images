@@ -1,4 +1,4 @@
-name: Docker image build and push
+name: Docker image build
 
 on:
   pull_request:
@@ -20,9 +20,7 @@ jobs:
         ]
     steps:
     - uses: actions/checkout@v2
-      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
     - name: Build ${{ matrix.distributions.dist }} ${{ matrix.distributions.code_name }} with Node.js ${{ matrix.distributions.node }}
-      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
       env:
         DOCKER_BUILDKIT: 1
       run: |
@@ -34,6 +32,11 @@ jobs:
             --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
             .
     - name: Hadolint
-      if: github.event_name == 'pull_request' && github.event_name != 'schedule'
       uses: brpaz/hadolint-action@v1.5.0
   
+    - name: Enable auto merge
+      uses: reitermarkus/automerge@v1.5.2
+      with:
+        token: ${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}
+        merge-method: rebase
+        pull-request: ${{ github.event.inputs.pull-request }}

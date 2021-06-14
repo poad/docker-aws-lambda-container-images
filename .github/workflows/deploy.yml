@@ -1,4 +1,4 @@
-name: Docker image build and push
+name: Docker image push
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
             --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
             --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
             --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
-            --target=release
+            --target=release \
             .
     - name: Build debug
       if: github.event_name != 'pull_request'
