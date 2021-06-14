@@ -29,26 +29,28 @@ jobs:
           { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 16 }
         ]
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
-    - name: Build the Docker image
-      env:
-        DOCKER_BUILDKIT: 1
-      run: |
-        docker build --rm \
-            -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
-            --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
-            --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
-            --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
-            --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
-            .
-    - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
-      uses: anchore/scan-action@main
-      with:
-        image: "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}"
-        acs-report-enable: true
-    - name: Upload Anchore Scan Report
-      if: ${{ always() }}
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: results.sarif
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Build the Docker image
+        if: ${{ always() }}
+        env:
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker build --rm \
+              -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
+              --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
+              --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
+              --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
+              --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+              .
+      - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
+        uses: anchore/scan-action@main
+        if: ${{ always() }}
+        with:
+          image: "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}"
+          acs-report-enable: true
+      - name: Upload Anchore Scan Report
+        if: ${{ always() }}
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif
