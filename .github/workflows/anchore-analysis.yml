@@ -35,7 +35,7 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           docker build --rm \
-              -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
+              -t "${{ matrix.distributions.dist }}:node${{ matrix.distributions.node }}" \
               --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
               --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
               --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
@@ -45,7 +45,7 @@ jobs:
         uses: anchore/scan-action@main
         if: ${{ always() }}
         with:
-          image: "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}"
+          image: "${{ matrix.distributions.dist }}:node${{ matrix.distributions.node }}"
           acs-report-enable: true
       - name: Upload Anchore Scan Report
         if: ${{ always() }}
