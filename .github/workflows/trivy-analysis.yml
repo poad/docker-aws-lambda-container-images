@@ -28,16 +28,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build an image from Dockerfile
-      env:
-        DOCKER_BUILDKIT: 1
-      run: |
-        docker build --rm \
-            -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
-            --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
-            --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
-            --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
-            --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
-            .
+        env:
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker build --rm \
+              -t "ghcr.io/lambda-container:${{ matrix.distributions.dist }}-node${{ matrix.distributions.node }}" \
+              --build-arg DEBIAN_DIST_NAME="${{ matrix.distributions.dist }}" \
+              --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
+              --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
+              --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+              .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
