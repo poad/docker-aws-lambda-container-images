@@ -57,7 +57,7 @@ jobs:
         RELEASE_IMAGE: "ghcr.io/poad/docker-aws-lambda-container-images/${{ matrix.distributions.dist }}:node${{ matrix.distributions.node }}"
         DEBUG_IMAGE: "ghcr.io/poad/docker-aws-lambda-container-images/${{ matrix.distributions.dist }}-debug:node${{ matrix.distributions.node }}"
       run: |
-        echo "${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}" | docker login https://docker.pkg.github.com -u poad --password-stdin && \
+        echo "${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}" | docker login ghcr.io -u poad --password-stdin && \
         docker push "${RELEASE_IMAGE}" && \
         docker push "${DEBUG_IMAGE}"
 
