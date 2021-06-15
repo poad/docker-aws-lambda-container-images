@@ -36,9 +36,12 @@ jobs:
       with:
         dockerfile: Dockerfile
     
-    - name: Enable auto merge
-      uses: reitermarkus/automerge@v1.5.2
-      with:
-        token: ${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}
-        merge-method: rebase
-        pull-request: ${{ github.event.inputs.pull-request }}
+    - name: Test
+      run: |
+        cd tests
+        docker build --rm \
+            --build-arg IMAGE_TAG="${{ matrix.distributions.dist }}:node${{ matrix.distributions.node }}" \
+            -t lambda:latest \
+            .
+        docker run -p 9000:8080 --name lambda -d lambda:latest
+        curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'

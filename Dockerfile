@@ -73,7 +73,9 @@ RUN chmod +x /tmp/setup \
     libnss3 \
     libncurses5 \
     python3.9 \
- && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog
+ && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog \
+ && mkdir -p /opt/extentions \
+ && chmod +x /var/task/bootstrap
 
 WORKDIR /var/task/
 
