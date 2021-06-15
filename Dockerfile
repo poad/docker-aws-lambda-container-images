@@ -48,7 +48,6 @@ ARG DEPS="\
     libsqlite3-dev \
     libbz2-dev \
     apt-utils \
-    ca-certificates \
 "
 ARG UBUNTU_VERSION_NAME
 
@@ -58,7 +57,7 @@ RUN chmod +x /tmp/setup \
  && /tmp/setup \
  && apt-get update -qq  \
  && apt-get upgrade -qqy  \
- && apt-get install -qqy --no-install-recommends ${DEPS} \
+ && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
