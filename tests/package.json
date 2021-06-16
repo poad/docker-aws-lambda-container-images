@@ -1,0 +1,30 @@
+{
+    "name": "cognito-lambda",
+    "version": "0.1.0",
+    "private": true,
+    "bin": {
+      "cognito-lambda": "bin/cognito-lambda.js"
+    },
+    "scripts": {
+      "build": "tsc",
+      "watch": "tsc -w",
+      "test": "jest",
+      "cdk": "cdk"
+    },
+    "devDependencies": {
+      "@types/aws-lambda": "^8.10.77",
+      "@types/node-fetch": "latest",
+      "ts-node": "^10.0.0",
+      "typescript": "^4.3.2"
+    },
+    "dependencies": {
+      "@aws-sdk/client-cognito-identity": "^3.18.0",
+      "@aws-sdk/client-cognito-identity-provider": "^3.18.0",
+      "@aws-sdk/client-s3": "^3.18.0",
+      "@types/node": "^15.12.2",
+      "aws-lambda": "latest",
+      "node-fetch": "latest",
+      "source-map-support": "latest"
+    }
+  }
+  
