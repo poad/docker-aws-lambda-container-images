@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-      "target": "ES2020",
+      "target": "ESNext",
       "module": "commonjs",
       "lib": [
-        "es2020",
+        "esnext",
         "dom"
       ],
+      "moduleResolution": "node",
       "declaration": true,
       "strict": true,
       "noImplicitAny": true,
@@ -16,12 +17,12 @@
       "noUnusedParameters": false,
       "noImplicitReturns": true,
       "noFallthroughCasesInSwitch": false,
-      "inlineSourceMap": true,
-      "inlineSources": true,
+      "inlineSourceMap": false,
       "experimentalDecorators": true,
       "strictPropertyInitialization": false,
       "typeRoots": ["./node_modules/@types"],
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "sourceMap": false
     },
     "exclude": ["cdk.out"]
   }

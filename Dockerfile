@@ -48,39 +48,47 @@ ARG DEPS="\
     libsqlite3-dev \
     libbz2-dev \
     apt-utils \
+    apt-transport-https \
+    lsb-release \
+    curl \
+    gnupg \
 "
 ARG UBUNTU_VERSION_NAME
 
+ENV LAMBDA_TASK_ROOT=/var/task
+ENV LAMBDA_RUNTIME_DIR=/var/runtime
+ENV PATH=${LAMBDA_TASK_ROOT}:/var/lang/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:${PATH}
+
 COPY --from=downloader /tmp/setup /tmp/setup
-COPY assets/bootstrap /var/task/bootstrap
-RUN chmod +x /tmp/setup \
- && /tmp/setup \
- && apt-get update -qq  \
- && apt-get upgrade -qqy  \
+RUN apt-get update -qq  \
  && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates \
+ && chmod +x /tmp/setup \
+ && /tmp/setup \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
- && apt-get full-upgrade -qqy \
- && apt-get install -qqy --no-install-recommends nodejs python3.9-dev \
+ && apt-get install -qqy --no-install-recommends nodejs python3.9-dev python3 \
  && npm install -g yarn \
  && rm -rf /tmp/setup\
+    libnss3 \
+    libncurses5 \
+    python3.9 \
  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1 \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1\
  && yarn global add aws-lambda-ric \
  && apt-get autoremove --purge -qqy ${DEPS} python3.9-dev \
  && apt-get install --no-install-recommends -qqy \
-    libnss3 \
-    libncurses5 \
-    python3.9 \
  && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog \
- && mkdir -p /opt/extentions \
- && chmod +x /var/task/bootstrap
+ && mkdir -p /opt/extensions
 
-WORKDIR /var/task/
+COPY assets/bootstrap ${LAMBDA_TASK_ROOT}/bootstrap
 
-ENTRYPOINT [ "/var/task/bootstrap" ]
-CMD [ "/var/task/handler" ]
+RUN chmod +x "${LAMBDA_TASK_ROOT}/bootstrap"
+
+
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+ENTRYPOINT [ "bootstrap" ]
 
 FROM release
 

@@ -1,4 +1,5 @@
 ARG IMAGE_TAG
+ARG FUNCTION_DIR="/work"
 
 FROM ${IMAGE_TAG} AS builder
 
@@ -8,15 +9,23 @@ WORKDIR /work
 
 COPY index.ts package.json tsconfig.json /work/
 
-RUN yarn install \
+RUN npm i -g yarn \
+ && yarn install \
  && yarn build
 
 FROM ${IMAGE_TAG}
 
-COPY --from=builder /work/index.js /work/package.json /var/task/
+ARG FUNCTION_DIR
 
-WORKDIR /var/task/
-RUN yarn install --production
+ENV LAMBDA_TASK_ROOT=/var/task
+
+RUN mkdir -p ${FUNCTION_DIR}
+
+COPY --from=builder /work/index.js /work/package.json ${FUNCTION_DIR}/
+
+WORKDIR ${FUNCTION_DIR}
+RUN npm i -g yarn \
+ && yarn install --production
 
 ENTRYPOINT [ "/var/task/bootstrap" ]
-CMD [ "/var/task/index.handler" ]
+CMD [ "index.handler" ]
