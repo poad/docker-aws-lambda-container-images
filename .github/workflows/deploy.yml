@@ -16,9 +16,7 @@ jobs:
           { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 12 },
           { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 12 },
           { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 14 },
-          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 14 },
-          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 16 },
-          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 16 }
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 14 }
         ]
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +33,7 @@ jobs:
             --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
             --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
             --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+            --build-arg NODE_VERSION="${{ matrix.distributions.node }}" \
             --target=release \
             .
     - name: Build debug
@@ -49,6 +48,7 @@ jobs:
             --build-arg DEBIAN_VERSION_NAME="${{ matrix.distributions.code_name }}" \
             --build-arg SLIM_IMAGE_SUFFIX="${{ matrix.distributions.image_name_suffix }}" \
             --build-arg UBUNTU_VERSION_NAME="${{ matrix.distributions.ubuntu_code_name }}" \
+            --build-arg NODE_VERSION="${{ matrix.distributions.node }}" \
             .
     - name: push
       if: github.event_name != 'pull_request'
