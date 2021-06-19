@@ -17,7 +17,8 @@ WORKDIR /var/task/
 ENV PATH ${PATH}:/root/.cargo/bin
 
 RUN curl -fsSLo /tmp/setup "https://deb.nodesource.com/setup_${NODE_VERSION}.x" \
- && curl -sSLo /tmp/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie
+ && curl -sSLo /tmp/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie \
+ && curl -ksSLo /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
 
 
 FROM ${DEBIAN_DIST_NAME}:${DEBIAN_VERSION_NAME}${SLIM_IMAGE_SUFFIX} AS release
@@ -60,6 +61,7 @@ ENV LAMBDA_RUNTIME_DIR=/var/runtime
 ENV PATH=${LAMBDA_TASK_ROOT}:/var/lang/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:${PATH}
 
 COPY --from=downloader /tmp/setup /tmp/setup
+COPY --from=downloader /tmp/get-pip.py /tmp/get-pip.py
 RUN apt-get update -qq  \
  && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates \
  && chmod +x /tmp/setup \
@@ -77,8 +79,9 @@ RUN apt-get update -qq  \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1\
  && yarn global add aws-lambda-ric \
  && apt-get autoremove --purge -qqy ${DEPS} python3.9-dev \
- && apt-get install --no-install-recommends -qqy \
- && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog \
+ && apt-get install --no-install-recommends -qqy python3.9 python3.9-distutils \
+ && python /tmp/get-pip.py \
+ && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog /tmp/get-pip.py \
  && mkdir -p /opt/extensions
 
 COPY assets/bootstrap ${LAMBDA_TASK_ROOT}/bootstrap
