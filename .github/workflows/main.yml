@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+  schedule:
+    - cron:  '0 0 * * 4'
 
   # Try enabling auto-merge for the specified pull request or all open pull requests if none is specified.
   workflow_dispatch:
