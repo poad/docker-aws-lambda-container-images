@@ -9,8 +9,7 @@ WORKDIR /work
 
 COPY index.ts package.json tsconfig.json /work/
 
-RUN npm i -g yarn \
- && npm run install \
+RUN npm i \
  && npm run build
 
 FROM ${IMAGE_TAG}
@@ -24,8 +23,7 @@ RUN mkdir -p ${FUNCTION_DIR}
 COPY --from=builder /work/index.js /work/package.json ${FUNCTION_DIR}/
 
 WORKDIR ${FUNCTION_DIR}
-RUN npm i -g yarn \
- && npm run install --production
+RUN npm i --production
 
 ENTRYPOINT [ "/var/task/bootstrap" ]
 CMD [ "index.handler" ]
