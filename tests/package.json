@@ -1,24 +1,24 @@
 {
-    "name": "cognito-lambda",
-    "version": "0.1.0",
-    "private": true,
-    "bin": {
-      "cognito-lambda": "bin/cognito-lambda.js"
-    },
-    "scripts": {
-      "build": "tsc",
-      "watch": "tsc -w",
-      "test": "jest",
-      "cdk": "cdk"
-    },
-    "devDependencies": {
-      "@types/aws-lambda": "^8.10.77",
-      "ts-node": "^10.0.0",
-      "typescript": "^4.3.4"
-    },
-    "dependencies": {
-      "@types/node": "^15.12.4",
-      "aws-lambda": "latest",
-      "source-map-support": "latest"
-    }
+  "name": "cognito-lambda",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "cognito-lambda": "bin/cognito-lambda.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.77",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "@types/node": "^15.12.4",
+    "aws-lambda": "latest",
+    "source-map-support": "latest"
   }
+}
