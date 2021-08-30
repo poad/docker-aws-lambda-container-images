@@ -9,12 +9,22 @@ on:
 
   # Try enabling auto-merge for the specified pull request or all open pull requests if none is specified.
   workflow_dispatch:
-    inputs:
-      pull-request:
-        description: Pull Request Number
-        required: false
 
 jobs:
+  configure:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+    steps:
+      - name: Enable auto merge to pull request
+        uses: poad/github-pull-request-auto-merge-enable-action@main
+        with:
+          pull_request_number: ${{ github.event.pull_request.number }}
+          github_token: ${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}
+          repository: ${{ github.event.repository.name }}
+          owner: ${{ github.repository_owner }}
+          merge_method: SQUASH
+
   docker_build:
     runs-on: ubuntu-latest
     strategy:
@@ -27,15 +37,6 @@ jobs:
         ]
     steps:
     - uses: actions/checkout@v2
-
-    - name: Enable auto merge to pull request
-      uses: poad/github-pull-request-auto-merge-enable-action@v1.0.0
-      with:
-        pull_request_number: ${{ github.event.pull_request.number }}
-        github_token: ${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}
-        repository: ${{ github.event.repository.name }}
-        owner: ${{ github.repository_owner }}
-        merge_method: SQUASH
 
     - name: Build ${{ matrix.distributions.dist }} ${{ matrix.distributions.code_name }} with Node.js ${{ matrix.distributions.node }}
       env:
