@@ -16,12 +16,10 @@ jobs:
     strategy:
       matrix:
         distributions: [
-          { "dist": "debian", "code_name": "bullseye", "image_name_suffix": "-slim", "ubuntu_code_name": "focal", "node": 12 },
-          { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 12 },
-          { "dist": "debian", "code_name": "bullseye", "image_name_suffix": "-slim", "ubuntu_code_name": "focal", "node": 14 },
-          { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 14 },
-          { "dist": "debian", "code_name": "bullseye", "image_name_suffix": "-slim", "ubuntu_code_name": "focal", "node": 16 },
-          { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 16 }
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 12 },
+          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 14 },
+          { "dist": "ubuntu", "code_name": "bionic", "image_name_suffix": "", "ubuntu_code_name": "bionic", "node": 14 }
         ]
     steps:
     - uses: actions/checkout@v2
