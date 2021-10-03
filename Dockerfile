@@ -78,8 +78,8 @@ RUN apt-get update -qq  \
  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1 \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1\
  && yarn global add aws-lambda-ric \
- && apt-get autoremove --purge -qqy ${DEPS} python3.9-dev \
  && apt-get install --no-install-recommends -qqy python3.9 python3.9-distutils \
+ && apt-get autoremove --purge -qqy ${DEPS} python3.9-dev \
  && python /tmp/get-pip.py \
  && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog /tmp/get-pip.py \
  && mkdir -p /opt/extensions
