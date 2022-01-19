@@ -39,10 +39,10 @@
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.90.tgz#d9995deb8925afb78b8c6179fc58fa9316925102"
   integrity sha512-B08uyjXQuOh/Kyj9NZ0BEJjkfqqj4tsAYpbBgUMRydtYAs1Fs5WL5KiYFtu+OoG5mI64pnsvW8ohFgpJYWdWIg==
 
-"@types/node@^17.0.9":
-  version "17.0.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.9.tgz#0b7f161afb5b1cc12518d29b2cdc7175d5490628"
-  integrity sha512-5dNBXu/FOER+EXnyah7rn8xlNrfMOQb/qXnw4NQgLkCygKBKhdmF/CA5oXVOKZLBEahw8s2WP9LxIcN/oDDRgQ==
+"@types/node@^17.0.10":
+  version "17.0.10"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.10.tgz#616f16e9d3a2a3d618136b1be244315d95bd7cab"
+  integrity sha512-S/3xB4KzyFxYGCppyDt68yzBU9ysL88lSdIah4D6cptdcltc4NCPCAMc0+PCpg/lLIyC7IPvj2Z52OJWeIUkog==
 
 acorn-walk@^8.1.1:
   version "8.2.0"
