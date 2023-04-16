@@ -31,12 +31,8 @@ jobs:
     strategy:
       matrix:
         distributions: [
-          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 14 },
-          { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 14 },
-          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 16 },
-          { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 16 },
-          { "dist": "debian", "code_name": "buster", "image_name_suffix": "-slim", "ubuntu_code_name": "bionic", "node": 18 },
-          { "dist": "ubuntu", "code_name": "focal", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 18 }
+          { "dist": "ubuntu", "code_name": "jammy", "image_name_suffix": "", "ubuntu_code_name": "jammy", "node": 16 },
+          { "dist": "ubuntu", "code_name": "jammy", "image_name_suffix": "", "ubuntu_code_name": "jammy", "node": 18 }
         ]
     steps:
     - uses: actions/checkout@v3
