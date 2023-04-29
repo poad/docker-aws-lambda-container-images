@@ -53,9 +53,9 @@
   integrity sha512-M8WpEGfC9iQ6V2Ccq6nGIXoQgeVc6z0Ngk8yCOL5V/TYIxshvb0MWQYLFFTZDesL0zmsoBc4OBjG9DB/4rei6w==
 
 "@types/node@*":
-  version "18.16.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.1.tgz#5db121e9c5352925bb1f1b892c4ae620e3526799"
-  integrity sha512-DZxSZWXxFfOlx7k7Rv4LAyiMroaxa3Ly/7OOzZO8cBNho0YzAi4qlbrx8W27JGqG57IgR/6J7r+nOJWw6kcvZA==
+  version "18.16.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.2.tgz#2f610ea71034b3971c312192377f8a7178eb57f1"
+  integrity sha512-GQW/JL/5Fz/0I8RpeBG9lKp0+aNcXEaVL71c0D2Q0QHDTFvlYKT7an0onCUXj85anv7b4/WesqdfchLc0jtsCg==
 
 acorn-walk@^8.1.1:
   version "8.2.0"
@@ -95,9 +95,9 @@ aws-lambda@*:
     watchpack "^2.0.0-beta.10"
 
 aws-sdk@^2.814.0:
-  version "2.1366.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1366.0.tgz#1c22ac7bde24b980541d1a7145dd59a4bc51ffd8"
-  integrity sha512-tS7y18KHH0eq43I8WJsxVBpwOMY45FSsu6a+A/6k0bMrE4zhd1fzhPN+5coNIODaGxnqVvgw9guLg3AOe4SpaA==
+  version "2.1368.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1368.0.tgz#8c7a4c899f3a983bfee25e485545c657ce53aad3"
+  integrity sha512-Yc3s8PqdcYG4wyCOpDj4TwXacGZGDgZBJ/XAtzMLKW2wN2c4uu7GwSosLxZ8ejzbAbcqjf080odPuD8P0819tw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
