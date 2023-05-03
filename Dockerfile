@@ -3,7 +3,7 @@ ARG DEBIAN_VERSION_NAME=jammy
 ARG SLIM_IMAGE_SUFFIX=-
 ARG UBUNTU_VERSION_NAME=jammy
 
-ARG NODE_VERSION=18
+ARG NODE_VERSION=16
 ARG LLVM_VERSION=16
 
 
@@ -63,23 +63,25 @@ ENV PATH=${LAMBDA_TASK_ROOT}:/var/lang/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin
 COPY --from=downloader /tmp/setup /tmp/setup
 COPY --from=downloader /tmp/get-pip.py /tmp/get-pip.py
 RUN apt-get update -qq  \
+ && apt-get full-upgrade -qqy \
  && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates \
  && chmod +x /tmp/setup \
  && /tmp/setup \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends nodejs python3.9-dev python3 \
+ && apt-get install -qqy --no-install-recommends nodejs python3.10-dev python3 \
  && npm install -g yarn \
  && rm -rf /tmp/setup\
     libnss3 \
     libncurses5 \
-    python3.9 \
- && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1 \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3 1\
- && yarn global add aws-lambda-ric \
- && apt-get install --no-install-recommends -qqy python3.9 python3.9-distutils \
- && apt-get autoremove --purge -qqy ${DEPS} python3.9-dev \
+    python3.10 \
+ && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 \
+ && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
+ && corepack enable
+RUN yarn global add aws-lambda-ric \
+ && apt-get install --no-install-recommends -qqy python3.10 python3.10-distutils \
+ && apt-get autoremove --purge -qqy ${DEPS} python3.10-dev \
  && python /tmp/get-pip.py \
  && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog /tmp/get-pip.py \
  && mkdir -p /opt/extensions
