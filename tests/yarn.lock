@@ -53,9 +53,9 @@
   integrity sha512-kCZuFXKLV3y8NjSoaD5+qKTpRWvPz3uh3W/u1uwlw3Mg+MtaStg1NWgjAwUXo/VJDb6n6KF1ljykFNlNwEJ53Q==
 
 "@types/node@*":
-  version "20.1.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.1.tgz#afc492e8dbe7f672dd3a13674823522b467a45ad"
-  integrity sha512-uKBEevTNb+l6/aCQaKVnUModfEMjAl98lw2Si9P5y4hLu9tm6AlX2ZIoXZX6Wh9lJueYPrGPKk5WMCNHg/u6/A==
+  version "20.1.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.1.2.tgz#8fd63447e3f99aba6c3168fd2ec4580d5b97886f"
+  integrity sha512-CTO/wa8x+rZU626cL2BlbCDzydgnFNgc19h4YvizpTO88MFQxab8wqisxaofQJ/9bLGugRdWIuX/TbIs6VVF6g==
 
 acorn-walk@^8.1.1:
   version "8.2.0"
@@ -95,9 +95,9 @@ aws-lambda@*:
     watchpack "^2.0.0-beta.10"
 
 aws-sdk@^2.814.0:
-  version "2.1375.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1375.0.tgz#9fbc6f7e1eb8211bd39ec32fb2d4a7a6a0de2469"
-  integrity sha512-4JusqLa0+TJ4a2rfxuiPiaEHZVxVWDzREN8rAI4zhL+u4QbqGq95yfMh9v5QtSDkdNCAReA5DSSVXPOHbS80pA==
+  version "2.1376.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1376.0.tgz#26b8e021cb62ef4dab5ce991fe7c84cf234ea1f2"
+  integrity sha512-ja/Xnft8BDcDEz786VJFPrWpuWpOgsA+QzBAwzsjYeIolQ/vEs/bbXkoS085fOoeAPEhYWQh9wog7cVvrQPJFQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
