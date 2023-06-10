@@ -3,9 +3,9 @@ ARG DEBIAN_VERSION_NAME=jammy
 ARG SLIM_IMAGE_SUFFIX=-
 ARG UBUNTU_VERSION_NAME=jammy
 
-ARG NODE_VERSION=16
+ARG NODE_VERSION=18
 ARG LLVM_VERSION=16
-
+ARG PYTHON_VERSION=3.11
 
 FROM buildpack-deps:${DEBIAN_VERSION_NAME}-curl AS downloader
 
@@ -24,6 +24,7 @@ RUN curl -fsSLo /tmp/setup "https://deb.nodesource.com/setup_${NODE_VERSION}.x" 
 FROM ${DEBIAN_DIST_NAME}:${DEBIAN_VERSION_NAME}${SLIM_IMAGE_SUFFIX} AS release
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG PYTHON_VERSION
 
 ARG DEPS="\
     autoconf \
@@ -70,18 +71,15 @@ RUN apt-get update -qq  \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends nodejs python3.10-dev python3 \
+ && apt-get install -qqy --no-install-recommends nodejs python${PYTHON_VERSION}-dev python3 \
  && npm install -g yarn \
  && rm -rf /tmp/setup\
-    libnss3 \
-    libncurses5 \
-    python3.10 \
- && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 \
+ && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1 \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
  && corepack enable
 RUN yarn global add aws-lambda-ric \
- && apt-get install --no-install-recommends -qqy python3.10 python3.10-distutils \
- && apt-get autoremove --purge -qqy ${DEPS} python3.10-dev \
+ && apt-get install --no-install-recommends -qqy python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils \
+ && apt-get autoremove --purge -qqy ${DEPS} python${PYTHON_VERSION}-dev \
  && python /tmp/get-pip.py \
  && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog /tmp/get-pip.py \
  && mkdir -p /opt/extensions
