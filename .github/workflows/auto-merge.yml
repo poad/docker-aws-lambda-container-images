@@ -1,0 +1,35 @@
+name: Docker image build
+
+on:
+  pull_request_target:
+    branches:
+      - main
+
+permissions:
+  actions: read
+  checks: write
+  contents: write
+  deployments: none
+  id-token: write
+  issues: none
+  packages: none
+  pull-requests: write
+  repository-projects: read
+  security-events: write
+  statuses: write
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+    steps:
+      - name: Enable auto merge to pull request
+        uses: poad/github-pull-request-auto-merge-enable-action@main
+        with:
+          pull_request_number: ${{ github.event.pull_request.number }}
+          github_token: ${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}
+          repository: ${{ github.event.repository.name }}
+          owner: ${{ github.repository_owner }}
+          merge_method: SQUASH
