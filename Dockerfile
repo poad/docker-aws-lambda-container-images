@@ -72,7 +72,7 @@ RUN apt-get update -qq  \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
  && apt-get install -qqy --no-install-recommends nodejs python${PYTHON_VERSION}-dev python3 \
- && npm install -g yarn \
+ && npm install -g yarn pnpm \
  && rm -rf /tmp/setup\
  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1 \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
