@@ -37,7 +37,7 @@ jobs:
           { "dist": "debian", "code_name": "bullseye", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 20 }
         ]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Build ${{ matrix.distributions.dist }} ${{ matrix.distributions.code_name }} with Node.js ${{ matrix.distributions.node }}
       env:
