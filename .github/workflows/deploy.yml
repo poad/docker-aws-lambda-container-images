@@ -37,7 +37,7 @@ jobs:
           { "dist": "debian", "code_name": "bullseye", "image_name_suffix": "", "ubuntu_code_name": "focal", "node": 20 }
         ]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       if: github.event_name != 'pull_request'
     - name: Build release
       if: github.event_name != 'pull_request'
