@@ -6,7 +6,13 @@ on:
 jobs:
   auto-merge:
     runs-on: ubuntu-latest
-
+    permissions:
+      checks: write
+      contents: write
+      id-token: write
+      pull-requests: write
+      statuses: write
+    
     if: github.actor == 'dependabot[bot]'
 
     steps:
@@ -14,12 +20,12 @@ jobs:
 
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
-          github-token: ${{ secrets.PERSONAL_TOKEN_FOR_GITHUB_ACTIONS }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           config: .github/dependabot-auto-merge.yml
 
       - name: Slack Notification (not success)
         uses: lazy-actions/slatify@master
-        if: ! success()
+        if: ${{ ! success() }}
         continue-on-error: true
         with:
           job_name: '*auto-merge*'
