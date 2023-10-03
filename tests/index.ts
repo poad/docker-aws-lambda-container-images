@@ -6,7 +6,7 @@ export const handler = async (
   // eslint-disable-next-line no-console
   console.log('request:', JSON.stringify(event, undefined, 2));
 
-  const pathParameters = event.pathParameters || { proxy: undefined };
+  const pathParameters = event.pathParameters ?? { proxy: undefined };
   const { proxy } = pathParameters;
   if (proxy === 'favicon.ico') {
     return {

@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@types/node": "^20.8.2",
-    "aws-lambda": "^1.0.7",
     "source-map-support": "^0.5.21"
   }
 }
