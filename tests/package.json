@@ -12,12 +12,12 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.129",
+    "@types/aws-lambda": "^8.10.130",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
   },
   "dependencies": {
-    "@types/node": "^20.10.0",
+    "@types/node": "^20.10.1",
     "source-map-support": "^0.5.21"
   }
 }
