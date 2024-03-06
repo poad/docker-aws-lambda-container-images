@@ -14,8 +14,8 @@ dependencies:
 
 devDependencies:
   '@types/aws-lambda':
-    specifier: ^8.10.134
-    version: 8.10.134
+    specifier: ^8.10.136
+    version: 8.10.136
   ts-node:
     specifier: ^10.9.2
     version: 10.9.2(@types/node@20.11.24)(typescript@5.3.3)
@@ -64,8 +64,8 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@types/aws-lambda@8.10.134:
-    resolution: {integrity: sha512-cfv422ivDMO+EeA3N4YcshbTHBL+5lLXe+Uz+4HXvIcsCuWvqNFpOs28ZprL8NA3qRCzt95ETiNAJDn4IcC/PA==}
+  /@types/aws-lambda@8.10.136:
+    resolution: {integrity: sha512-cmmgqxdVGhxYK9lZMYYXYRJk6twBo53ivtXjIUEFZxfxe4TkZTZBK3RRWrY2HjJcUIix0mdifn15yjOAat5lTA==}
     dev: true
 
   /@types/node@20.11.24:
