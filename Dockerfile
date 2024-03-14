@@ -72,12 +72,12 @@ RUN apt-get update -qq  \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
  && apt-get install -qqy --no-install-recommends nodejs python${PYTHON_VERSION}-dev python3 \
- && npm install -g yarn pnpm \
  && rm -rf /tmp/setup\
  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1 \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
- && corepack enable
-RUN yarn global add aws-lambda-ric \
+ && corepack enable \
+ && corepack prepare pnpm@latest --activate
+RUN pnpm -g i aws-lambda-ric \
  && apt-get install --no-install-recommends -qqy python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils \
  && apt-get autoremove --purge -qqy ${DEPS} python${PYTHON_VERSION}-dev \
  && python /tmp/get-pip.py \
