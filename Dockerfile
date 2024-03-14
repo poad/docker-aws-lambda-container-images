@@ -63,24 +63,38 @@ ENV PATH=${LAMBDA_TASK_ROOT}:/var/lang/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin
 
 COPY --from=downloader /tmp/setup /tmp/setup
 COPY --from=downloader /tmp/get-pip.py /tmp/get-pip.py
+
 RUN apt-get update -qq  \
  && apt-get full-upgrade -qqy \
- && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates \
+ && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates python3-launchpadlib \
  && chmod +x /tmp/setup \
  && /tmp/setup \
- && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
+ && rm -rf /tmp/setup \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog
+
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
  && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
  && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends nodejs python${PYTHON_VERSION}-dev python3 \
- && rm -rf /tmp/setup\
+ && apt-get install -qqy --no-install-recommends nodejs python${PYTHON_VERSION}-dev python${PYTHON_VERSION} \
  && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1 \
  && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
- && corepack enable \
- && corepack prepare pnpm@latest --activate
-RUN pnpm -g i aws-lambda-ric \
- && apt-get install --no-install-recommends -qqy python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils \
- && apt-get autoremove --purge -qqy ${DEPS} python${PYTHON_VERSION}-dev \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog
+
+ENV PNPM_HOME="/root/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ENV SHELL="/bin/bash"
+
+RUN corepack enable \
+ && corepack prepare pnpm@latest --activate \
+ && pnpm setup
+
+RUN apt-get install --no-install-recommends -qqy python${PYTHON_VERSION} \
  && python /tmp/get-pip.py \
+ && python -m pip install --upgrade setuptools \
+ && pnpm -g i aws-lambda-ric \
+ && apt-get autoremove --purge -qqy ${DEPS} python${PYTHON_VERSION}-dev \
  && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog /tmp/get-pip.py \
  && mkdir -p /opt/extensions
 
