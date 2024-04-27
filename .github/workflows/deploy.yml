@@ -29,6 +29,7 @@ jobs:
     strategy:
       matrix:
         distributions: [
+          { "dist": "ubuntu", "code_name": "noble", "image_name_suffix": "", "ubuntu_code_name": "noble", "node": 20 },
           { "dist": "ubuntu", "code_name": "jammy", "image_name_suffix": "", "ubuntu_code_name": "jammy", "node": 20 },
           { "dist": "debian", "code_name": "bookworm", "image_name_suffix": "", "ubuntu_code_name": "jammy", "node": 20 }
         ]
