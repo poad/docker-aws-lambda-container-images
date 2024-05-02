@@ -67,5 +67,6 @@ jobs:
         RESULT=$(curl -sSL -i -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}' | grep "HTTP/1.1 200" | wc -l) && \
         if [ ${RESULT} -ne 1 ]; then \
           echo ${RESULT} && \
+          docker logs lambda;
           exit -1;
         fi
