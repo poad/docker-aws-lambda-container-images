@@ -4,27 +4,57 @@ ARG SLIM_IMAGE_SUFFIX=
 ARG UBUNTU_VERSION_NAME=noble
 
 ARG NODE_VERSION=20
-ARG LLVM_VERSION=18
-ARG PYTHON_VERSION=3.12
 
-FROM buildpack-deps:${DEBIAN_VERSION_NAME}-curl AS downloader
+FROM --platform=$BUILDPLATFORM buildpack-deps:${DEBIAN_VERSION_NAME}-curl AS downloader
 
 ARG NODE_VERSION
-ARG LLVM_VERSION
+
+ARG BUILDPLATFORM
+ARG TARGETPLATFORM
+
+RUN BUILD_OPTIONS=""; TARGET="" \
+  && if [ "${TARGETPLATFORM}" != "${BUILDPLATFORM}" ]; then \
+        case "${TARGETPLATFORM}" in \
+            'linux/arm64') \
+                SUFFIX="-arm64" \
+                export SUFFIX \
+                ;; \
+            *) \
+                ;; \
+        esac; \
+    fi
 
 WORKDIR /var/task/
 
 ENV PATH ${PATH}:/root/.cargo/bin
 
 RUN curl -fsSLo /tmp/setup "https://deb.nodesource.com/setup_${NODE_VERSION}.x" \
- && curl -sSLo /tmp/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie \
- && curl -ksSLo /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
+ && curl -sSLo /tmp/aws-lambda-rie "https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie${SUFFIX}"
 
+FROM --platform=$BUILDPLATFORM ${DEBIAN_DIST_NAME}:${DEBIAN_VERSION_NAME}${SLIM_IMAGE_SUFFIX} AS release
 
-FROM ${DEBIAN_DIST_NAME}:${DEBIAN_VERSION_NAME}${SLIM_IMAGE_SUFFIX} AS release
+RUN BUILD_OPTIONS=""; TARGET="" \
+  && if [ "${TARGETPLATFORM}" != "${BUILDPLATFORM}" ]; then \
+        case "${TARGETPLATFORM}" in \
+            'linux/arm64') \
+                apt update -qqqqy \
+                apt install -qqqqy --no-install-recommends g++-aarch64-linux-gnu libc6-dev-arm64-cross crossbuild-essential-arm64  \
+                TARGET="aarch64-unknown-linux-gnu" \
+                BUILD_OPTIONS="--target=${TARGET}" \
+                ;; \
+            'linux/amd64') \
+                apt update -qqqqy \
+                apt install -qqqqy --no-install-recommends g++-x86_64-linux-gnu libc6-dev-amd64-cross crossbuild-essential-amd64 \
+                TARGET="x86_64-unknown-linux-gnu" \
+                BUILD_OPTIONS="--target=${TARGET}" \
+                ;; \
+            *) \
+                ;; \
+        esac; \
+    fi
+
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG PYTHON_VERSION
 
 ARG DEPS="\
     autoconf \
@@ -54,6 +84,8 @@ ARG DEPS="\
     lsb-release \
     curl \
     gnupg \
+    m4 \
+    python3-dev \
 "
 ARG UBUNTU_VERSION_NAME
 
@@ -62,53 +94,49 @@ ENV LAMBDA_RUNTIME_DIR=/var/runtime
 ENV PATH=${LAMBDA_TASK_ROOT}:/var/lang/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:${PATH}
 
 COPY --from=downloader /tmp/setup /tmp/setup
-COPY --from=downloader /tmp/get-pip.py /tmp/get-pip.py
-
-RUN apt-get update -qq  \
- && apt-get full-upgrade -qqy \
- && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates python3-launchpadlib \
- && chmod +x /tmp/setup \
- && /tmp/setup \
- && rm -rf /tmp/setup \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog
-
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BA6932366A755776 \
- && add-apt-repository "deb http://ppa.launchpad.net/deadsnakes/ppa/ubuntu ${UBUNTU_VERSION_NAME} main" \
- && apt-get update -qq \
- && apt-get install -qqy --no-install-recommends nodejs python${PYTHON_VERSION}-dev python${PYTHON_VERSION} \
- && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1 \
- && update-alternatives --install /usr/bin/python python /usr/bin/python3 1 \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog
 
 ENV PNPM_HOME="/root/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV SHELL="/bin/bash"
 
+RUN apt-get update -qqq \
+ && apt-get full-upgrade -qqqy \
+ && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates python3-distutils-extra python3-venv \
+ && chmod +x /tmp/setup \
+ && /tmp/setup \
+ && rm -rf /tmp/setup \
+ && apt-get install -qqy --no-install-recommends nodejs \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog
+
+WORKDIR /root
+
 RUN corepack enable \
  && corepack prepare pnpm@latest --activate \
  && pnpm setup
 
-RUN apt-get install --no-install-recommends -qqy python${PYTHON_VERSION} \
- && python /tmp/get-pip.py \
- && python -m pip install --upgrade setuptools \
- && pnpm -g i aws-lambda-ric \
- && apt-get autoremove --purge -qqy ${DEPS} python${PYTHON_VERSION}-dev \
- && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog /tmp/get-pip.py \
+WORKDIR /var/task/
+ 
+RUN pnpm -g i aws-lambda-ric \
+ && apt-get autoremove --purge -qqy ${DEPS} python3-dev \
+ && rm -rf /var/lib/apt/lists/* /var/log/apt/* /var/log/alternatives.log /var/log/dpkg.log /var/log/faillog /var/log/lastlog \
  && mkdir -p /opt/extensions
 
 COPY assets/bootstrap ${LAMBDA_TASK_ROOT}/bootstrap
 
 RUN chmod +x "${LAMBDA_TASK_ROOT}/bootstrap"
 
+RUN groupadd -g 10000 node \
+ && useradd -g 10000 -l -m -s /usr/bin/bash -u 10000 node
 
 WORKDIR ${LAMBDA_TASK_ROOT}
 
-ENTRYPOINT [ "bootstrap" ]
+ENTRYPOINT [ "./bootstrap" ]
 
-FROM release
+FROM release AS testing
 
-COPY --from=downloader /tmp/aws-lambda-rie /usr/bin/aws-lambda-rie
+COPY --from=downloader /tmp/aws-lambda-rie /usr/local/bin/aws-lambda-rie
 
-RUN chmod +x /usr/bin/aws-lambda-rie
+RUN chmod +x /usr/local/bin/aws-lambda-rie
+
+FROM testing
