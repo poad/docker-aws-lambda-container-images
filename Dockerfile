@@ -3,7 +3,7 @@ ARG DEBIAN_VERSION_NAME=noble
 ARG SLIM_IMAGE_SUFFIX=
 ARG UBUNTU_VERSION_NAME=noble
 
-ARG NODE_VERSION=20
+ARG NODE_VERSION=22
 
 FROM --platform=$BUILDPLATFORM buildpack-deps:${DEBIAN_VERSION_NAME}-curl AS downloader
 
@@ -112,7 +112,7 @@ RUN apt-get update -qqq \
 WORKDIR /root
 
 RUN corepack enable \
- && corepack prepare pnpm@latest --activate \
+ && corepack prepare pnpm@latest-10 --activate \
  && pnpm setup
 
 WORKDIR /var/task/
