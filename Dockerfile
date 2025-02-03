@@ -111,8 +111,7 @@ RUN apt-get update -qqq \
 
 WORKDIR /root
 
-RUN corepack enable \
- && corepack prepare pnpm@latest-10 --activate \
+RUN npm i -g pnpm@10 \
  && pnpm setup
 
 WORKDIR /var/task/
