@@ -63,7 +63,6 @@ ARG DEPS="\
     gcc \
     libtool \
     make \
-    cmake \
     unzip \
     libcurl4-openssl-dev \
     wget \
@@ -101,7 +100,7 @@ ENV SHELL="/bin/bash"
 
 RUN apt-get update -qqq \
  && apt-get full-upgrade -qqqy \
- && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates python3-distutils-extra python3-venv \
+ && apt-get install -qqy --no-install-recommends ${DEPS} ca-certificates python3-distutils-extra python3-venv cmake \
  && chmod +x /tmp/setup \
  && /tmp/setup \
  && rm -rf /tmp/setup \
