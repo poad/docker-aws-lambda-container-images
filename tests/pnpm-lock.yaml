@@ -9,21 +9,21 @@ importers:
   .:
     dependencies:
       '@types/node':
-        specifier: ^22.13.11
-        version: 22.13.11
+        specifier: ^22.13.12
+        version: 22.13.12
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
     devDependencies:
       '@types/aws-lambda':
-        specifier: ^8.10.147
-        version: 8.10.147
+        specifier: ^8.10.148
+        version: 8.10.148
       pnpm:
         specifier: ^10.6.5
         version: 10.6.5
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@22.13.11)(typescript@5.8.2)
+        version: 10.9.2(@types/node@22.13.12)(typescript@5.8.2)
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
@@ -56,11 +56,11 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
-  '@types/aws-lambda@8.10.147':
-    resolution: {integrity: sha512-nD0Z9fNIZcxYX5Mai2CTmFD7wX7UldCkW2ezCF8D1T5hdiLsnTWDGRpfRYntU6VjTdLQjOvyszru7I1c1oCQew==}
+  '@types/aws-lambda@8.10.148':
+    resolution: {integrity: sha512-JL+2cfkY9ODQeE06hOxSFNkafjNk4JRBgY837kpoq1GHDttq2U3BA9IzKOWxS4DLjKoymGB4i9uBrlCkjUl1yg==}
 
-  '@types/node@22.13.11':
-    resolution: {integrity: sha512-iEUCUJoU0i3VnrCmgoWCXttklWcvoCIx4jzcP22fioIVSdTmjgoEvmAO/QPw6TcS9k5FrNgn4w7q5lGOd1CT5g==}
+  '@types/node@22.13.12':
+    resolution: {integrity: sha512-ixiWrCSRi33uqBMRuICcKECW7rtgY43TbsHDpM2XK7lXispd48opW+0IXrBVxv9NMhaz/Ue9kyj6r3NTVyXm8A==}
 
   acorn-walk@8.3.4:
     resolution: {integrity: sha512-ueEepnujpqee2o5aIYnvHU6C0A42MNdsIDeqy5BydrkuC5R1ZuUFnm27EeFJGoEHJQgn3uleRvmTXaJgfXbt4g==}
@@ -151,9 +151,9 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@types/aws-lambda@8.10.147': {}
+  '@types/aws-lambda@8.10.148': {}
 
-  '@types/node@22.13.11':
+  '@types/node@22.13.12':
     dependencies:
       undici-types: 6.20.0
 
@@ -182,14 +182,14 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  ts-node@10.9.2(@types/node@22.13.11)(typescript@5.8.2):
+  ts-node@10.9.2(@types/node@22.13.12)(typescript@5.8.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 22.13.11
+      '@types/node': 22.13.12
       acorn: 8.14.1
       acorn-walk: 8.3.4
       arg: 4.1.3
